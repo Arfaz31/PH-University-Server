@@ -40,6 +40,7 @@ export type TStudent = {
   profileImg?: string;
   admissionSemester: Types.ObjectId;
   academicDepartment: Types.ObjectId;
+  academicFaculty: Types.ObjectId;
   isDeleted: boolean;
 };
 
@@ -53,7 +54,7 @@ export interface StudentTStaticModel extends Model<TStudent> {
 // export type StudentMethods = {
 //   // eslint-disable-next-line no-unused-vars
 //   isUserExits(id: string): Promise<TStudent | null>;
-//   //isUserExits StudentMethodsobject er ekta property and eta promise er moddhe Tstudent return kore.
+//   //isUserExits StudentMethods object er ekta property and eta promise er moddhe Tstudent return kore.
 // };
 
 // // Create a new Model type that knows about StudentMethods...

@@ -27,6 +27,7 @@ const globalErrorHandler = (
   ];
 
   if (err instanceof ZodError) {
+    //instanceof is used to check if err is an instance of ZodError. This ensures that the error is specifically a validation error thrown by Zod.
     const simplifiedError = handleZodError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;

@@ -92,7 +92,7 @@ const studentSchema = new Schema<TStudent, StudentTStaticModel>(
     permanentAddress: { type: String, required: true },
     guardian: { type: guardianSchema, required: true },
     localGuardian: { type: localGuardianSchema, required: true },
-    profileImg: { type: String },
+    profileImg: { type: String, default: '' },
     admissionSemester: {
       type: Schema.Types.ObjectId,
       ref: 'AcademicSemister',
@@ -105,6 +105,10 @@ const studentSchema = new Schema<TStudent, StudentTStaticModel>(
     academicDepartment: {
       type: Schema.Types.ObjectId,
       ref: 'AcademicDepartment',
+    },
+    academicFaculty: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicFaculty',
     },
   },
   { toJSON: { virtuals: true } },
@@ -134,11 +138,13 @@ studentSchema.virtual('fullName').get(function () {
 //   return existingUser;
 // };
 
+//creating a custom instance method
 // studentSchema.methods.isUserExits = async function (id: string) {
 //   const existingUser = await StudentModel.findOne({ id });
 //   return existingUser;
 // };
 
+//check the student is exist or not by pre middleware hook
 // studentSchema.pre('findOneAndUpdate', async function (next) {
 //   const query = this.getQuery();
 

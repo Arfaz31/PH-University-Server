@@ -6,10 +6,11 @@ import catchAsync from '../../utills/catchAsync';
 const createStudent = catchAsync(async (req, res) => {
   const { password, student: studentData } = req.body;
 
-  //zod validation
-  //   const zodValidationData = studentValidationSchema.parse(studentData);
-
-  const result = await userServices.createStudentInDB(password, studentData);
+  const result = await userServices.createStudentInDB(
+    req.file,
+    password,
+    studentData,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -22,7 +23,11 @@ const createStudent = catchAsync(async (req, res) => {
 const createFaculty = catchAsync(async (req, res) => {
   const { password, faculty: facultyData } = req.body;
 
-  const result = await userServices.createFacultyIntoDB(password, facultyData);
+  const result = await userServices.createFacultyIntoDB(
+    req.file,
+    password,
+    facultyData,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -35,7 +40,11 @@ const createFaculty = catchAsync(async (req, res) => {
 const createAdmin = catchAsync(async (req, res) => {
   const { password, admin: adminData } = req.body;
 
-  const result = await userServices.createAdminIntoDB(password, adminData);
+  const result = await userServices.createAdminIntoDB(
+    req.file,
+    password,
+    adminData,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -45,8 +54,35 @@ const createAdmin = catchAsync(async (req, res) => {
   });
 });
 
+const getMe = catchAsync(async (req, res) => {
+  const { userId, role } = req.user;
+
+  const result = await userServices.getMeFromDB(userId, role);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User is retrieved succesfully',
+    data: result,
+  });
+});
+
+const changeStatus = catchAsync(async (req, res) => {
+  const id = req.params.id;
+
+  const result = await userServices.changeStatus(id, req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Status is updated succesfully',
+    data: result,
+  });
+});
 export const userController = {
   createStudent,
   createFaculty,
   createAdmin,
+  getMe,
+  changeStatus,
 };

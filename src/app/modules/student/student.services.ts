@@ -8,13 +8,15 @@ import QueryBuilder from '../../Builder/QueryBuilder';
 import { studentSearchableFields } from './student.constant';
 
 const getAllStudentFromDB = async (query: Record<string, unknown>) => {
+  // main qyery spread kore copy kore neoa hoy jate filtering somoy searchAbleFields exclude kora jai. nahole kono data paoa jabena karon searchterm o tokhon exact match korar try korbe but searchterm will be partial match like name=arf and filtering is exact match like email=arfazahamed1@gmail.com
   // const queryObject = { ...query };
+
   // const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
   // let searchTerm = '';
   // if (query?.searchTerm) {
   //   searchTerm = query?.searchTerm as string;
   // }
-
+  // {email: {$regex: searchTerm}} eivabe search hocche ar $or use kora hoise bcz ek property te na pele arekta diye search hobe
   // const searchQuery = Student.find({
   //   $or: studentSearchableFields.map((field) => ({
   //     [field]: { $regex: searchTerm, $options: 'i' },
@@ -83,12 +85,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   const studentQuery = new QueryBuilder(
     Student.find()
       .populate('admissionSemester')
-      .populate({
-        path: 'academicDepartment',
-        populate: {
-          path: 'academicFaculty', //child reference. student er child department and department er child faculty.
-        },
-      }),
+      .populate('academicDepartment academicFaculty'),
     query,
   )
     .search(studentSearchableFields)
@@ -96,9 +93,9 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields();
-
+  const meta = await studentQuery.countTotal();
   const result = await studentQuery.modelQuery;
-  return result;
+  return { meta, result };
 };
 
 const getSingleStudentFromDB = async (id: string) => {

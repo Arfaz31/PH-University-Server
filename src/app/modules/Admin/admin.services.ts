@@ -7,7 +7,7 @@ import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { User } from '../User/user.model';
 
-const getAllAdminFromDB = async (query: Record<string, unknown>) => {
+const getAllAdminsFromDB = async (query: Record<string, unknown>) => {
   const adminQuery = new QueryBuilder(Admin.find(), query)
     .search(AdminSearchableFields)
     .filter()
@@ -16,7 +16,11 @@ const getAllAdminFromDB = async (query: Record<string, unknown>) => {
     .fields();
 
   const result = await adminQuery.modelQuery;
-  return result;
+  const meta = await adminQuery.countTotal();
+  return {
+    result,
+    meta,
+  };
 };
 
 const getSingleAdminFromDB = async (id: string) => {
@@ -83,7 +87,7 @@ const deleteAdminFromDB = async (id: string) => {
 };
 
 export const AdminServices = {
-  getAllAdminFromDB,
+  getAllAdminsFromDB,
   getSingleAdminFromDB,
   updateAdminIntoDB,
   deleteAdminFromDB,

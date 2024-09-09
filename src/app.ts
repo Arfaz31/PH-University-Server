@@ -3,17 +3,19 @@ import cors from 'cors';
 import globalErrorHandler from './app/middleware/globalErrorHandler';
 import notFoundRoute from './app/middleware/notFoundRoute';
 import router from './app/routes';
+import cookieParser from 'cookie-parser';
 const app: Application = express();
 
 //parser
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 
 //application routes
 app.use('/api/v1/', router);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello there');
+  res.send('Welcom to PH University server side');
 });
 
 //global error handler
