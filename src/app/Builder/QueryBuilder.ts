@@ -1,7 +1,7 @@
 import { FilterQuery, Query } from 'mongoose';
 
 class QueryBuilder<T> {
-  public modelQuery: Query<T[], T>;
+  public modelQuery: Query<T[], T>; //modelquery(actually modelquery is student/academy etc data model) can return array of object or just object
   public query: Record<string, unknown>;
   constructor(modelQuery: Query<T[], T>, query: Record<string, unknown>) {
     this.modelQuery = modelQuery;
